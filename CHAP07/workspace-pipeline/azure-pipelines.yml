@@ -54,6 +54,6 @@ steps:
       provider: 'azurerm'
       command: 'apply'
       workingDirectory: 'CHAP07/workspace-pipeline/'
-      commandOptions: '-out="out.tfplan"'
+      commandOptions: '"out.tfplan"'
       environmentServiceNameAzureRM: 'Terraform_ARM'
     displayName: Apply
