@@ -1,5 +1,10 @@
 terraform {
-  backend "azurerm" {}
+  backend "azurerm" {
+    resource_group_name  = "diag-rg"
+    storage_account_name = "thiguishdiag"
+    container_name       = "terraform"
+    key                  = "patatones.tfstate"
+  }
 }
 
 
