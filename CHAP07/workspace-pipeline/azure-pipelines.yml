@@ -30,7 +30,6 @@ steps:
       provider: 'azurerm'
       command: 'validate'
       workingDirectory: 'CHAP07/workspace-pipeline/'
-      commandOptions: '-out="out.tfplan"'
     displayName: Validate
 
   - task: PowerShell@2
