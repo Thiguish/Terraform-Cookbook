@@ -44,9 +44,10 @@ steps:
     inputs:
       provider: 'azurerm'
       command: 'plan'
-      workingDirectory: '''CHAP07/workspace-pipeline/'''
+      workingDirectory: 'CHAP07/workspace-pipeline/'
       commandOptions: '-out="out.tfplan"'
       environmentServiceNameAzureRM: 'Terraform_ARM'
+    displayName: Plan
 
   - task: TerraformTaskV4@4
     inputs:
@@ -54,4 +55,5 @@ steps:
       command: 'apply'
       workingDirectory: 'CHAP07/workspace-pipeline/'
       commandOptions: '-out="out.tfplan"'
+      environmentServiceNameAzureRM: 'Terraform_ARM'
     displayName: Apply
