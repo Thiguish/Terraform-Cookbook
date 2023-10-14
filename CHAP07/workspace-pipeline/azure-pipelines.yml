@@ -9,6 +9,7 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+
   - task: TerraformInstaller@1
     inputs:
       terraformVersion: 'latest'
@@ -43,9 +44,9 @@ steps:
     inputs:
       provider: 'azurerm'
       command: 'plan'
-      workingDirectory: 'CHAP07/workspace-pipeline/'
-    displayName: Plan
-
+      workingDirectory: '''CHAP07/workspace-pipeline/'''
+      commandOptions: '-out="out.tfplan"'
+      environmentServiceNameAzureRM: 'Terraform_ARM'
 
   - task: TerraformTaskV4@4
     inputs:
