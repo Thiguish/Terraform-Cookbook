@@ -9,23 +9,29 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-
-  - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
-    displayName: 'Install Terraform 0.12.29'
+  - task: TerraformInstaller@1
     inputs:
-      terraformVersion: 0.12.29
-
-  - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
-    displayName: 'terraform init'
+      terraformVersion: 'latest'
+    displayName: Terraform Install
+  - task: TerraformTaskV4@4
     inputs:
-      command: init
-      workingDirectory: "CHAP07/workspace-pipeline/"
-      backendType: azurerm
-      backendServiceArm: 'Demo Book'
-      backendAzureRmResourceGroupName: 'RG_BACKEND'
-      backendAzureRmStorageAccountName: storagetfbackendbook
-      backendAzureRmContainerName: tfstate
-      backendAzureRmKey: myappdemows.tfstate
+      provider: 'azurerm'
+      command: 'init'
+      workingDirectory: 'CHAP07/workspace-pipeline/'
+      backendServiceArm: 'Terraform_ARM'
+      backendAzureRmResourceGroupName: 'diag-rg'
+      backendAzureRmStorageAccountName: 'thiguishdiag'
+      backendAzureRmContainerName: 'terraform'
+      backendAzureRmKey: 'cookbook.tfstate'
+    displayName: Init
+
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'azurerm'
+      command: 'validate'
+      workingDirectory: 'CHAP07/workspace-pipeline/'
+      commandOptions: '-out="out.tfplan"'
+    displayName: Validate
 
   - task: PowerShell@2
     displayName: 'Manage Workspaces'
@@ -33,18 +39,20 @@ steps:
       filePath: 'CHAP07/workspace-pipeline/ManageWorkspaces.ps1'
       arguments: '$(Build.SourceBranchName)'
       workingDirectory: "CHAP07/workspace-pipeline/"
+    displayName: Workspace
 
-  - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
-    displayName: 'terraform plan'
+  - task: TerraformTaskV4@4
     inputs:
-      command: plan
-      workingDirectory: "CHAP07/workspace-pipeline/"
+      provider: 'azurerm'
+      command: 'plan'
+      workingDirectory: 'CHAP07/workspace-pipeline/'
+    displayName: Plan
+
+
+  - task: TerraformTaskV4@4
+    inputs:
+      provider: 'azurerm'
+      command: 'apply'
+      workingDirectory: 'CHAP07/workspace-pipeline/'
       commandOptions: '-out="out.tfplan"'
-
-
-  - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-cli.TerraformCLI@0
-    displayName: 'terraform apply'
-    inputs:
-      command: apply
-      workingDirectory: "CHAP07/workspace-pipeline/"
-      commandOptions: 'out.tfplan'
+    displayName: Apply
