@@ -1,4 +1,5 @@
 terraform {
+  required_providers {}
   backend "azurerm" {
     resource_group_name  = "diag-rg"
     storage_account_name = "thiguishdiag"
